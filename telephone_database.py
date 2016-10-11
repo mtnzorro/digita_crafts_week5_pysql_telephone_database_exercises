@@ -45,18 +45,25 @@ def set_entry():
 
 def delete_entry():
     name_del = raw_input("Name: ").lower().title()
-    found_name = False
-    for names in name_results:
-        if names.name == name_del:
-            print "Deleted entry for %s" % names.name
-            db.delete('phonebook', {'id' : names.id})
-            found_name = True
-            break
-        else:
-            pass
-    if found_name == False:
-        print "No entry found for %s" % name_del
-    found_name = False
+    result_list = db.query("select id from phonebook where name ilike '%s'" % name_del).namedresult()
+    if len(result_list) > 0:
+        id = result_list[0].id
+        print "Deleted entry for %s" % name_del
+        db.delete('phonebook', {'id' : id})
+    else:
+         print "No entry found for %s" % name_del
+    # found_name = False
+    # for names in name_results:
+    #     if names.name == name_del:
+    #         print "Deleted entry for %s" % names.name
+    #         db.delete('phonebook', {'id' : names.id})
+    #         found_name = True
+    #         break
+    #     else:
+    #         pass
+    # if found_name == False:
+    #     print "No entry found for %s" % name_del
+    # found_name = False
 
 def list_all():
     for names in name_results:
